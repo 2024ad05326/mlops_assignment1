@@ -3,6 +3,8 @@
 
 A reproducible, cloud-ready binary classifier for predicting heart disease risk from the UCI Heart Disease dataset. This repository implements a complete MLOps pipeline: data acquisition, EDA, model training with experiment tracking (MLflow), containerization (Docker), CI/CD (GitHub Actions), Kubernetes deployment, and monitoring (Prometheus metrics + application logging).
 
+**Video Recording**: [mlops assignment.mov](mlops%20assignment.mov)
+
 ---
 
 ## Table of Contents
