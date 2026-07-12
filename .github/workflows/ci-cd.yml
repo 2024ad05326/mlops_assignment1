@@ -9,7 +9,7 @@ on:
 jobs:
   test_and_train:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Check out Repository
         uses: actions/checkout@v4
@@ -17,18 +17,28 @@ jobs:
       - name: Set up Astral uv
         uses: astral-sh/setup-uv@v3
         with:
-          # Automatically cache uv package installations across runs
           enable-cache: true
           cache-dependency-glob: "uv.lock"
 
       - name: Synchronize Project Virtual Environment
         run: uv sync --all-groups
 
+      - name: Lint Code (ruff)
+        run: |
+          uv tool install ruff
+          uv run ruff check src/ tests/
+
       - name: Execute Automated Data Acquisition Pipeline
         run: uv run src/download_data.py
+
+      - name: Execute Exploratory Data Analysis (EDA)
+        run: uv run src/eda.py
 
       - name: Execute Model Training Pipeline (With MLflow Tracking)
         run: uv run src/train.py
 
       - name: Execute Automated Test Suite (Pytest Verification)
-        run: uv run pytest
+        run: uv run pytest --tb=short
+
+      - name: Build Docker Image
+        run: docker build -t heart-disease-api:latest -f deployment/Dockerfile .
